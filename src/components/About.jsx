@@ -1,7 +1,7 @@
 import React from 'react'
 import SectionWrapper, { SectionHeader } from './SectionWrapper'
 import { Award, Star, Users } from 'lucide-react'
-import herImage from '../assets/her.jpg' // ✅ ADD THIS
+import herImage from '../assets/Her.jpg'
 
 const stats = [
   { icon: Award, label: 'Years of Excellence', value: '5+' },
