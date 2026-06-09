@@ -1,6 +1,7 @@
 import React from 'react'
 import SectionWrapper, { SectionHeader } from './SectionWrapper'
 import { Award, Star, Users } from 'lucide-react'
+import herImage from '../assets/her.jpg' // ✅ ADD THIS
 
 const stats = [
   { icon: Award, label: 'Years of Excellence', value: '5+' },
@@ -21,21 +22,22 @@ export default function About() {
           <div className="relative">
             {/* Outer gold frame */}
             <div className="absolute -inset-3 border border-gold/20 rounded-sm" />
+
             {/* Inner image container */}
             <div className="relative overflow-hidden rounded-sm aspect-[4/5] bg-night-300">
               <img
-                src="https://data.thefeedfeed.com/static/2019/07/25/15640664865d39c2b65214d.webp"
+                src={herImage} // ✅ IMAGE ADDED HERE
                 alt="Premium wine presentation"
                 loading="lazy"
                 className="absolute inset-0 w-full h-full object-cover"
               />
+
               <div className="absolute inset-0 bg-night/40" />
               <div className="absolute inset-0 bg-gradient-to-br from-brown-dark via-night-300 to-night-400 mix-blend-soft-light" />
 
-              {/* Decorative glassware silhouettes */}
+              {/* {/* Decorative glassware silhouettes */}
               <div className="absolute inset-0 flex items-end justify-center pb-8 opacity-20">
                 <div className="flex gap-8 items-end">
-                  {/* Wine glass silhouette */}
                   <div className="flex flex-col items-center gap-1">
                     <div className="w-1 h-20 bg-gold-champagne" />
                     <div className="w-10 h-px bg-gold-champagne" />
@@ -59,12 +61,6 @@ export default function About() {
                 </div>
               </div>
 
-              {/* Gold corner accents */}
-              <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-gold/60" />
-              <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-gold/60" />
-              <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-gold/60" />
-              <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-gold/60" />
-
               {/* Center text overlay */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center px-8">
@@ -80,7 +76,9 @@ export default function About() {
             <div className="absolute -bottom-6 -right-6 bg-night-200 border border-gold/30 p-5 shadow-xl">
               <div className="text-center">
                 <span className="block font-serif text-3xl gold-text font-bold">5★</span>
-                <span className="block text-[9px] tracking-[0.3em] uppercase text-brown-light mt-1">Rated Experience</span>
+                <span className="block text-[9px] tracking-[0.3em] uppercase text-brown-light mt-1">
+                  Rated Experience
+                </span>
               </div>
             </div>
           </div>
@@ -94,13 +92,15 @@ export default function About() {
               We Don't Just Serve Drinks,{' '}
               <em className="text-gold not-italic">We Create Experiences.</em>
             </h2>
+
             <div className="w-16 h-px bg-gold/50 mb-8" />
 
             <p className="text-brown-light leading-relaxed mb-5 font-light text-sm md:text-base">
-              Founded with a passion for craftsmanship and an eye for elegance, Doramart Cocktail & Drinks has redefined what it means to host in style. We believe every gathering — whether intimate or grand — deserves a touch of luxury.
+              Founded with a passion for craftsmanship and an eye for elegance, Doramart Cocktail & Drinks has redefined what it means to host in style.
             </p>
+
             <p className="text-brown-light leading-relaxed mb-10 font-light text-sm md:text-base">
-              Our master mixologists blend rare spirits, fresh botanicals, and artistic flair to produce cocktails that don't just taste extraordinary — they become the centerpiece of every memory you make. From weddings to corporate galas, we bring the lounge to you.
+              Our master mixologists blend rare spirits, fresh botanicals, and artistic flair to produce cocktails that become the centerpiece of every memory.
             </p>
 
             {/* Stats */}
@@ -109,11 +109,14 @@ export default function About() {
                 <div key={label} className="text-center">
                   <Icon size={18} className="text-gold mx-auto mb-2 opacity-80" />
                   <div className="font-serif text-2xl gold-text font-bold">{value}</div>
-                  <div className="text-[10px] tracking-[0.2em] uppercase text-brown-light mt-1 leading-tight">{label}</div>
+                  <div className="text-[10px] tracking-[0.2em] uppercase text-brown-light mt-1">
+                    {label}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
+
         </div>
       </div>
 

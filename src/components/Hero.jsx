@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Button from './Button'
-
 export default function Hero() {
   const [visible, setVisible] = useState(false)
   useEffect(() => { const t = setTimeout(() => setVisible(true), 100); return () => clearTimeout(t) }, [])
