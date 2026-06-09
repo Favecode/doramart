@@ -23,13 +23,24 @@ export default function About() {
             <div className="absolute -inset-3 border border-gold/20 rounded-sm" />
             {/* Inner image container */}
             <div className="relative overflow-hidden rounded-sm aspect-[4/5] bg-night-300">
-              {/* Gradient cocktail imagery simulation */}
-              <div className="absolute inset-0 bg-gradient-to-br from-brown-dark via-night-300 to-night-400" />
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_40%,rgba(201,168,76,0.15)_0%,transparent_60%)]" />
+              <img
+                src="https://data.thefeedfeed.com/static/2019/07/25/15640664865d39c2b65214d.webp"
+                alt="Premium wine presentation"
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-night/40" />
+              <div className="absolute inset-0 bg-gradient-to-br from-brown-dark via-night-300 to-night-400 mix-blend-soft-light" />
 
               {/* Decorative glassware silhouettes */}
               <div className="absolute inset-0 flex items-end justify-center pb-8 opacity-20">
                 <div className="flex gap-8 items-end">
+                  {/* Wine glass silhouette */}
+                  <div className="flex flex-col items-center gap-1">
+                    <div className="w-1 h-20 bg-gold-champagne" />
+                    <div className="w-10 h-px bg-gold-champagne" />
+                    <div className="w-14 h-16 bg-gold-champagne rounded-b-full" />
+                  </div>
                   <div className="flex flex-col items-center gap-1">
                     <div className="w-1 h-24 bg-gold-champagne" />
                     <div className="w-10 h-px bg-gold-champagne" />

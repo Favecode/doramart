@@ -7,6 +7,12 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 md:pt-28">
+      <img
+        src="https://images.unsplash.com/photo-1485792533214-9e7b283f557c?auto=format&fit=crop&w=1800&q=80"
+        alt="Cocktail bar ambience"
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay"
+      />
       {/* Background layers */}
       <div className="absolute inset-0 bg-gradient-to-br from-night via-night-200 to-brown-dark" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_60%_40%,rgba(201,168,76,0.08)_0%,transparent_60%)]" />

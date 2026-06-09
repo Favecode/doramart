@@ -39,24 +39,24 @@ export default function Booking() {
             </div>
 
             <div className="space-y-5">
-              <a href="tel:+2348000000000" className="group flex items-center gap-4 p-4 border border-gold/10 hover:border-gold/30 transition-all duration-300 bg-night-200">
+              <a href="tel:+2347070646467" className="group flex items-center gap-4 p-4 border border-gold/10 hover:border-gold/30 transition-all duration-300 bg-night-200">
                 <div className="w-10 h-10 bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
                   <Phone size={16} className="text-gold" />
                 </div>
                 <div>
                   <div className="text-[9px] tracking-[0.3em] uppercase text-brown-light mb-1">Call Us</div>
-                  <div className="text-gold-champagne text-sm font-medium">+234 800 000 0000</div>
+                  <div className="text-gold-champagne text-sm font-medium">+234 707 064 6467</div>
                 </div>
               </a>
 
-              <a href="https://instagram.com/doramart_drinks" target="_blank" rel="noreferrer"
+              <a href="https://instagram.com/doramart_cocktail" target="_blank" rel="noreferrer"
                 className="group flex items-center gap-4 p-4 border border-gold/10 hover:border-gold/30 transition-all duration-300 bg-night-200">
                 <div className="w-10 h-10 bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
                   <Instagram size={16} className="text-gold" />
                 </div>
                 <div>
                   <div className="text-[9px] tracking-[0.3em] uppercase text-brown-light mb-1">Instagram</div>
-                  <div className="text-gold-champagne text-sm font-medium">@doramart_drinks</div>
+                  <div className="text-gold-champagne text-sm font-medium">@doramart_cocktail</div>
                 </div>
               </a>
             </div>

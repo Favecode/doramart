@@ -36,11 +36,11 @@ export default function Footer() {
               "Sip. Savor. Celebrate Life."
             </p>
             <div className="flex items-center gap-3">
-              <a href="https://instagram.com/doramart_drinks" target="_blank" rel="noreferrer"
+              <a href="https://instagram.com/doramart_cocktail" target="_blank" rel="noreferrer"
                 className="w-9 h-9 border border-gold/20 flex items-center justify-center text-gold/60 hover:border-gold/50 hover:text-gold hover:bg-gold/5 transition-all duration-300">
                 <Instagram size={15} />
               </a>
-              <a href="https://tiktok.com/@doramart_drinks" target="_blank" rel="noreferrer"
+              <a href="https://tiktok.com/@doramart_cocktail" target="_blank" rel="noreferrer"
                 className="w-9 h-9 border border-gold/20 flex items-center justify-center text-gold/60 hover:border-gold/50 hover:text-gold hover:bg-gold/5 transition-all duration-300">
                 <TikTokIcon size={15} />
               </a>
@@ -67,15 +67,15 @@ export default function Footer() {
             <div className="space-y-3">
               <div>
                 <div className="text-[9px] tracking-[0.3em] uppercase text-brown-light/50 mb-1">Phone</div>
-                <a href="tel:+2348000000000" className="text-sm text-gold-champagne/70 hover:text-gold transition-colors">+234 800 000 0000</a>
+                <a href="tel:+2347070646467" className="text-sm text-gold-champagne/70 hover:text-gold transition-colors">+234 707 064 6467</a>
               </div>
               <div>
                 <div className="text-[9px] tracking-[0.3em] uppercase text-brown-light/50 mb-1">Instagram</div>
-                <a href="https://instagram.com/doramart_drinks" className="text-sm text-gold-champagne/70 hover:text-gold transition-colors">@doramart_drinks</a>
+                <a href="https://instagram.com/doramart_cocktail" className="text-sm text-gold-champagne/70 hover:text-gold transition-colors">@doramart_cocktail</a>
               </div>
               <div>
                 <div className="text-[9px] tracking-[0.3em] uppercase text-brown-light/50 mb-1">TikTok</div>
-                <a href="https://tiktok.com/@doramart_drinks" className="text-sm text-gold-champagne/70 hover:text-gold transition-colors">@doramart_drinks</a>
+                <a href="https://tiktok.com/@doramart_cocktail" className="text-sm text-gold-champagne/70 hover:text-gold transition-colors">@doramart_cocktail</a>
               </div>
             </div>
           </div>

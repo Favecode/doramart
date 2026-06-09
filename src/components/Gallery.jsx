@@ -4,15 +4,15 @@ import { X, ZoomIn } from 'lucide-react'
 
 // Realistic cocktail & drinks gallery items using gradient placeholders
 const galleryItems = [
-  { id: 1, label: 'Signature Martini', color: 'from-amber-900 via-yellow-900 to-night-300', accent: 'rgba(180,120,30,0.4)' },
-  { id: 2, label: 'Rose Champagne Tower', color: 'from-pink-900 via-rose-900 to-night-300', accent: 'rgba(180,60,80,0.3)' },
-  { id: 3, label: 'Tropical Mocktail', color: 'from-green-900 via-teal-900 to-night-300', accent: 'rgba(30,120,90,0.4)' },
-  { id: 4, label: 'Premium Whiskey', color: 'from-yellow-900 via-amber-800 to-night-300', accent: 'rgba(160,90,20,0.4)' },
-  { id: 5, label: 'Fruit Parfait', color: 'from-red-900 via-orange-900 to-night-300', accent: 'rgba(180,60,30,0.4)' },
-  { id: 6, label: 'Midnight Negroni', color: 'from-indigo-900 via-purple-900 to-night-300', accent: 'rgba(80,40,140,0.4)' },
-  { id: 7, label: 'Citrus Spritz', color: 'from-yellow-800 via-lime-900 to-night-300', accent: 'rgba(140,140,20,0.4)' },
-  { id: 8, label: 'Berry Sangria', color: 'from-purple-900 via-pink-900 to-night-300', accent: 'rgba(120,40,100,0.4)' },
-  { id: 9, label: 'Golden Fizz', color: 'from-yellow-800 via-amber-700 to-night-300', accent: 'rgba(200,150,20,0.5)' },
+  { id: 1, label: 'Signature Martini', src: 'https://www.dashofjazz.com/wp-content/uploads/2024/10/Dash-of-Jazz-Nigerian-Chapman-Drink-9.jpg', alt: 'Signature martini', color: 'from-amber-900 via-yellow-900 to-night-300' },
+  { id: 2, label: 'Rose Champagne Tower', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIhyEmJKxYm2_PP67pUxloYeRX7e5tu7Z5hg&s', alt: 'Champagne tower', color: 'from-pink-900 via-rose-900 to-night-300' },
+  { id: 3, label: 'Tropical Mocktail', src: 'https://images.squarespace-cdn.com/content/v1/54222358e4b0ef23d87a996b/1580196278885-B2D24QBR5DPI0CUTENH2/strawberry.jpg', alt: 'Tropical mocktail', color: 'from-green-900 via-teal-900 to-night-300' },
+  { id: 4, label: 'Premium Whiskey', src: 'https://files.selar.co/product-images/2022/products/LolasPatisserie/greek-yoghurt-and-parfait-selar.co-62f3faa38d0c8.jpeg', alt: 'Premium whiskey', color: 'from-yellow-900 via-amber-800 to-night-300' },
+  { id: 5, label: 'Fruit Parfait', src: 'https://www.nairaland.com/attachments/19689009_img6365_jpegc4248d041fad01cfe29d86d7c2e07fcb', alt: 'Fruit parfait', color: 'from-red-900 via-orange-900 to-night-300' },
+  { id: 6, label: 'Midnight Negroni', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9hTUzenf2BdX16Z8bwSheZUeBS4vFJIHxUg&s', alt: 'Midnight Negroni', color: 'from-indigo-900 via-purple-900 to-night-300' },
+  { id: 7, label: 'Citrus Spritz', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVK9A8sGF4yU5w0c-J-Fliu0QO9uIDGqX3yw&s', alt: 'Citrus spritz', color: 'from-yellow-800 via-lime-900 to-night-300' },
+  { id: 8, label: 'Berry Sangria', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAS5xPRvFT3HHnp0tXYHP1L6vxqMksfEWxwA&s', alt: 'Berry sangria', color: 'from-purple-900 via-pink-900 to-night-300' },
+  { id: 9, label: 'Golden Fizz', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWKhszwO2ToBNSrgJQhVQKaIfGco2SLBTBIw&s', alt: 'Golden fizz cocktail', color: 'from-yellow-800 via-amber-700 to-night-300' },
 ]
 
 function GalleryItem({ item, onClick }) {
@@ -21,12 +21,13 @@ function GalleryItem({ item, onClick }) {
       className="group relative overflow-hidden cursor-pointer aspect-square bg-night-300"
       onClick={() => onClick(item)}
     >
-      {/* Gradient background */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${item.color} transition-transform duration-700 group-hover:scale-110`} />
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400"
-        style={{ background: `radial-gradient(ellipse at center, ${item.accent} 0%, transparent 70%)` }} />
-
-      {/* Dark overlay */}
+      <img
+        src={item.src}
+        alt={item.alt}
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      />
+      <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-20 transition-transform duration-700 group-hover:scale-105`} />
       <div className="absolute inset-0 bg-night/40 group-hover:bg-night/20 transition-colors duration-400" />
 
       {/* Cocktail glass silhouette decoration */}
@@ -66,13 +67,17 @@ function Lightbox({ item, onClose }) {
         className="relative w-full max-w-lg mx-6 border border-gold/20 overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
-        <div className={`aspect-square bg-gradient-to-br ${item.color} flex items-center justify-center`}>
-          <div className="absolute inset-0 bg-night/30" />
-          <div className="relative text-center px-8">
-            <div className="w-px h-16 bg-gold/30 mx-auto mb-4" />
-            <p className="font-serif italic text-gold-champagne/80 text-2xl">{item.label}</p>
-            <div className="w-px h-16 bg-gold/30 mx-auto mt-4" />
-          </div>
+        <img
+          src={item.src}
+          alt={item.alt}
+          loading="lazy"
+          className="w-full object-cover aspect-square"
+        />
+        <div className="absolute inset-0 bg-night/30" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
+          <div className="w-px h-16 bg-gold/30 mx-auto mb-4" />
+          <p className="font-serif italic text-gold-champagne/80 text-2xl">{item.label}</p>
+          <div className="w-px h-16 bg-gold/30 mx-auto mt-4" />
         </div>
         <div className="bg-night-200 border-t border-gold/20 p-4 text-center">
           <p className="text-[10px] tracking-[0.4em] uppercase text-gold font-medium">{item.label}</p>
