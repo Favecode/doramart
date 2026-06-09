@@ -6,7 +6,7 @@ export default function Hero() {
   useEffect(() => { const t = setTimeout(() => setVisible(true), 100); return () => clearTimeout(t) }, [])
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 md:pt-28">
       {/* Background layers */}
       <div className="absolute inset-0 bg-gradient-to-br from-night via-night-200 to-brown-dark" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_60%_40%,rgba(201,168,76,0.08)_0%,transparent_60%)]" />
@@ -23,9 +23,7 @@ export default function Hero() {
 
       {/* Content */}
       <div className={`relative z-10 text-center px-6 max-w-5xl mx-auto transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-        <span className="inline-block text-[10px] tracking-[0.5em] uppercase text-gold font-sans font-medium mb-8 opacity-80">
-          Est. 2020 · Lagos, Nigeria
-        </span>
+     
 
         <div className="mb-2">
           <span className="font-serif text-gold/30 text-xl md:text-2xl italic tracking-wider">The Art of</span>

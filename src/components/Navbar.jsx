@@ -19,8 +19,10 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handler)
   }, [])
 
+  const navOpaque = scrolled || open
+
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'py-3 bg-night/95 backdrop-blur-md border-b border-gold/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]' : 'py-6 bg-transparent'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${navOpaque ? 'py-3 bg-night/95 backdrop-blur-md border-b border-gold/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]' : 'py-6 bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
         {/* Logo */}
         <a href="#" className="flex flex-col">
@@ -50,7 +52,7 @@ export default function Navbar() {
       </div>
 
       {/* Mobile menu */}
-      <div className={`md:hidden overflow-hidden transition-all duration-400 ${open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+      <div className={`md:hidden overflow-hidden transition-[max-height,opacity] duration-400 ${open ? 'max-h-96 opacity-100 pointer-events-auto' : 'max-h-0 opacity-0 pointer-events-none'}`}>
         <div className="bg-night/98 border-t border-gold/10 px-6 py-6 flex flex-col gap-5">
           {links.map(l => (
             <a key={l.label} href={l.href} onClick={() => setOpen(false)}
