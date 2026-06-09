@@ -36,7 +36,7 @@ export default function Footer() {
               "Sip. Savor. Celebrate Life."
             </p>
             <div className="flex items-center gap-3">
-              <a href="https://instagram.com/doramart_cocktail" target="_blank" rel="noreferrer"
+              <a href="https://instagram.com/Doramart_cocktail_and_drinks" target="_blank" rel="noreferrer"
                 className="w-9 h-9 border border-gold/20 flex items-center justify-center text-gold/60 hover:border-gold/50 hover:text-gold hover:bg-gold/5 transition-all duration-300">
                 <Instagram size={15} />
               </a>
@@ -71,7 +71,7 @@ export default function Footer() {
               </div>
               <div>
                 <div className="text-[9px] tracking-[0.3em] uppercase text-brown-light/50 mb-1">Instagram</div>
-                <a href="https://instagram.com/doramart_cocktail" className="text-sm text-gold-champagne/70 hover:text-gold transition-colors">@doramart_cocktail</a>
+                <a href="https://instagram.com/Doramart_cocktail_and_drinks" className="text-sm text-gold-champagne/70 hover:text-gold transition-colors">@doramart_cocktail</a>
               </div>
               <div>
                 <div className="text-[9px] tracking-[0.3em] uppercase text-brown-light/50 mb-1">TikTok</div>
