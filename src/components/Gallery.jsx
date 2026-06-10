@@ -3,12 +3,12 @@ import SectionWrapper, { SectionHeader } from './SectionWrapper'
 import { X, ZoomIn, Share2, Check, Copy, MessageCircle, Download, Loader2 } from 'lucide-react'
 
 // Local product images — place these in src/assets/
-import product1 from '../assets/product1.jpg'
-import product2 from '../assets/product2.jpg'
-import product3 from '../assets/product3.jpg'
-import product4 from '../assets/product4.jpg'
-import product5 from '../assets/product5.jpg'
-import product6 from '../assets/product6.jpg'
+import product1 from '../assets/Product1.jpg'
+import product2 from '../assets/Product2.jpg'
+import product3 from '../assets/Product3.jpg'
+import product4 from '../assets/Product4.jpg'
+import product5 from '../assets/Product5.jpg'
+import product6 from '../assets/Product6.jpg'
 import birthday from '../assets/birthday.jpg'
 
 const galleryItems = [
