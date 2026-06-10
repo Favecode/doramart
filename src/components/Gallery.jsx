@@ -2,174 +2,210 @@ import React, { useState } from 'react'
 import SectionWrapper, { SectionHeader } from './SectionWrapper'
 import { X, ZoomIn, Share2, Check, Copy, MessageCircle, Download, Loader2 } from 'lucide-react'
 
+// Local product images — place these in src/assets/
+import product1 from '../assets/product1.jpg'
+import product2 from '../assets/product2.jpg'
+import product3 from '../assets/product3.jpg'
+import product4 from '../assets/product4.jpg'
+import product5 from '../assets/product5.jpg'
+import product6 from '../assets/product6.jpg'
+import birthday from '../assets/birthday.jpg'
+
 const galleryItems = [
-  { id: 1, label: 'Signature Martini', price: '₦8,500', src: 'https://www.dashofjazz.com/wp-content/uploads/2024/10/Dash-of-Jazz-Nigerian-Chapman-Drink-9.jpg', alt: 'Signature martini', color: 'from-amber-900 via-yellow-900 to-night-300' },
-  { id: 2, label: 'Rose Champagne Tower', price: '₦45,000', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIhyEmJKxYm2_PP67pUxloYeRX7e5tu7Z5hg&s', alt: 'Champagne tower', color: 'from-pink-900 via-rose-900 to-night-300' },
-  { id: 3, label: 'Tropical Mocktail', price: '₦5,000', src: 'https://images.squarespace-cdn.com/content/v1/54222358e4b0ef23d87a996b/1580196278885-B2D24QBR5DPI0CUTENH2/strawberry.jpg', alt: 'Tropical mocktail', color: 'from-green-900 via-teal-900 to-night-300' },
-  { id: 4, label: 'Premium Whiskey', price: '₦12,000', src: 'https://files.selar.co/product-images/2022/products/LolasPatisserie/greek-yoghurt-and-parfait-selar.co-62f3faa38d0c8.jpeg', alt: 'Premium whiskey', color: 'from-yellow-900 via-amber-800 to-night-300' },
-  { id: 5, label: 'Fruit Parfait', price: '₦6,500', src: 'https://www.nairaland.com/attachments/19689009_img6365_jpegc4248d041fad01cfe29d86d7c2e07fcb', alt: 'Fruit parfait', color: 'from-red-900 via-orange-900 to-night-300' },
-  { id: 6, label: 'Midnight Negroni', price: '₦9,000', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9hTUzenf2BdX16Z8bwSheZUeBS4vFJIHxUg&s', alt: 'Midnight Negroni', color: 'from-indigo-900 via-purple-900 to-night-300' },
-  { id: 7, label: 'Citrus Spritz', price: '₦7,000', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVK9A8sGF4yU5w0c-J-Fliu0QO9uIDGqX3yw&s', alt: 'Citrus spritz', color: 'from-yellow-800 via-lime-900 to-night-300' },
-  { id: 8, label: 'Berry Sangria', price: '₦8,000', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAS5xPRvFT3HHnp0tXYHP1L6vxqMksfEWxwA&s', alt: 'Berry sangria', color: 'from-purple-900 via-pink-900 to-night-300' },
-  { id: 9, label: 'Golden Fizz', price: '₦10,500', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWKhszwO2ToBNSrgJQhVQKaIfGco2SLBTBIw&s', alt: 'Golden fizz cocktail', color: 'from-yellow-800 via-amber-700 to-night-300' },
+  { id: 1, label: 'Raspberry Mix',    price: '₦3,500',  src: product1, alt: 'Raspberry mix',     color: 'from-amber-900 via-yellow-900 to-night-300' },
+  { id: 2, label: 'Tequila Sunrise', price: '₦3,500', src: product2, alt: 'Tequila sunrise',        color: 'from-pink-900 via-rose-900 to-night-300'   },
+  { id: 3, label: 'Pouch Cocktail/Mocktail',    price: '₦3,000',  src: product3, alt: 'Pouch cocktail/mocktail',      color: 'from-green-900 via-teal-900 to-night-300'  },
+  { id: 4, label: 'Milkshake',      price: '₦5,000', src: product4, alt: 'Milkshake',        color: 'from-yellow-900 via-amber-800 to-night-300'},
+  { id: 5, label: ' Fruit Salad',     price: '₦2,000',  src: product5, alt: 'Fruit salad',       color: 'from-indigo-900 via-purple-900 to-night-300'},
+  { id: 6, label: 'Golden Fizz',          price: '₦10,500', src: product6, alt: 'Golden fizz cocktail',   color: 'from-yellow-800 via-amber-700 to-night-300'},
+  { id: 7, label: 'Parfait',          price: '₦2,000', src: birthday, alt: 'Birthday parfait',   color: 'from-yellow-800 via-amber-700 to-night-300'},
 ]
 
-// Draws the image onto a canvas with branded overlay, returns a File blob
+// ─── Canvas branding ──────────────────────────────────────────────────────────
+// Draws the local product image onto a 1080×1080 canvas with a Doramart
+// branded overlay, then resolves to a File blob for the Web Share API.
+// Local assets are same-origin so the canvas is never tainted.
+
 async function buildShareImage(item) {
-  // Fetch image through a CORS proxy so canvas doesn't get tainted
-  const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(item.src)}`
-  const resp = await fetch(proxyUrl)
-  const blob = await resp.blob()
-  const imgBitmap = await createImageBitmap(blob)
+  const img = new Image()
+  img.src = item.src
+
+  await new Promise((resolve, reject) => {
+    img.onload  = resolve
+    img.onerror = () => reject(new Error('Image failed to load'))
+  })
 
   const SIZE = 1080
   const canvas = document.createElement('canvas')
-  canvas.width = SIZE
+  canvas.width  = SIZE
   canvas.height = SIZE
   const ctx = canvas.getContext('2d')
 
-  // Draw image, cover-fit
-  const scale = Math.max(SIZE / imgBitmap.width, SIZE / imgBitmap.height)
-  const w = imgBitmap.width * scale
-  const h = imgBitmap.height * scale
-  ctx.drawImage(imgBitmap, (SIZE - w) / 2, (SIZE - h) / 2, w, h)
+  // Cover-fit
+  const scale = Math.max(SIZE / img.naturalWidth, SIZE / img.naturalHeight)
+  const w = img.naturalWidth  * scale
+  const h = img.naturalHeight * scale
+  ctx.drawImage(img, (SIZE - w) / 2, (SIZE - h) / 2, w, h)
 
-  // Dark gradient overlay (bottom 40%)
-  const grad = ctx.createLinearGradient(0, SIZE * 0.55, 0, SIZE)
+  // Dark gradient overlay (bottom 45%)
+  const grad = ctx.createLinearGradient(0, SIZE * 0.52, 0, SIZE)
   grad.addColorStop(0, 'rgba(10,8,6,0)')
-  grad.addColorStop(1, 'rgba(10,8,6,0.92)')
+  grad.addColorStop(1, 'rgba(10,8,6,0.93)')
   ctx.fillStyle = grad
   ctx.fillRect(0, 0, SIZE, SIZE)
 
   // Gold divider line
   const lineGrad = ctx.createLinearGradient(60, 0, SIZE - 60, 0)
-  lineGrad.addColorStop(0, 'rgba(201,168,76,0)')
+  lineGrad.addColorStop(0,   'rgba(201,168,76,0)')
   lineGrad.addColorStop(0.5, 'rgba(201,168,76,0.8)')
-  lineGrad.addColorStop(1, 'rgba(201,168,76,0)')
+  lineGrad.addColorStop(1,   'rgba(201,168,76,0)')
   ctx.fillStyle = lineGrad
-  ctx.fillRect(60, SIZE - 230, SIZE - 120, 1)
+  ctx.fillRect(60, SIZE - 235, SIZE - 120, 1)
 
   // Drink name
   ctx.fillStyle = '#F5E6C8'
-  ctx.font = `bold 52px Georgia, serif`
+  ctx.font      = 'bold 54px Georgia, serif'
   ctx.textAlign = 'left'
-  ctx.fillText(item.label, 60, SIZE - 175)
+  ctx.fillText(item.label, 60, SIZE - 178)
 
   // Price
   ctx.fillStyle = '#C9A84C'
-  ctx.font = `bold 48px Georgia, serif`
-  ctx.fillText(item.price, 60, SIZE - 112)
+  ctx.font      = 'bold 48px Georgia, serif'
+  ctx.fillText(item.price, 60, SIZE - 115)
 
   // Brand name
   ctx.fillStyle = 'rgba(201,168,76,0.7)'
-  ctx.font = `300 28px Georgia, serif`
-  ctx.fillText('Doramart Cocktail & Drinks', 60, SIZE - 58)
+  ctx.font      = '300 28px Georgia, serif'
+  ctx.fillText('Doramart Cocktail & Drinks', 60, SIZE - 60)
 
   // Top-left logo mark
   ctx.fillStyle = 'rgba(201,168,76,0.9)'
-  ctx.font = `italic 30px Georgia, serif`
-  ctx.textAlign = 'left'
+  ctx.font      = 'italic 30px Georgia, serif'
   ctx.fillText('Doramart', 40, 60)
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
-      resolve(new File([blob], `doramart-${item.label.replace(/\s+/g, '-').toLowerCase()}.jpg`, { type: 'image/jpeg' }))
+      if (!blob) { reject(new Error('Canvas toBlob failed')); return }
+      resolve(new File(
+        [blob],
+        `doramart-${item.label.replace(/\s+/g, '-').toLowerCase()}.jpg`,
+        { type: 'image/jpeg' }
+      ))
     }, 'image/jpeg', 0.92)
   })
 }
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+// Try native share with a file; fall back to text-only share; then to a URL.
+async function nativeShareWithFile(file, text, fallbackUrl) {
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], text }); return 'file' } catch (err) {
+      if (err.name === 'AbortError') return 'abort'
+    }
+  }
+  if (navigator.share) {
+    try { await navigator.share({ text, url: fallbackUrl }); return 'text' } catch (err) {
+      if (err.name === 'AbortError') return 'abort'
+    }
+  }
+  return 'unsupported'
+}
+
+// ─── Share Menu ───────────────────────────────────────────────────────────────
+
 function ShareMenu({ item, onClose }) {
   const [loading, setLoading] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const [error, setError] = useState('')
+  const [copied,  setCopied]  = useState(false)
+  const [error,   setError]   = useState('')
+
   const shareText = `✨ ${item.label} — ${item.price}\n\nOrder from Doramart Cocktail & Drinks 🍹\n📞 +234 800 000 0000\n📸 @doramart_drinks`
 
-  const getImageFile = async () => {
+  const getFile = async () => {
     setLoading(true)
     setError('')
-    try {
-      const file = await buildShareImage(item)
-      return file
-    } catch (e) {
-      setError('Could not load image. Try "Download" instead.')
-      return null
-    } finally {
-      setLoading(false)
-    }
+    try   { return await buildShareImage(item) }
+    catch (e) { console.error(e); setError('Image build failed. Try "Save Image" instead.'); return null }
+    finally   { setLoading(false) }
   }
 
-  // Native share WITH image file (works on mobile: WhatsApp, IG, etc.)
-  const handleNativeShare = async (e) => {
-    e.stopPropagation()
-    const file = await getImageFile()
-    if (!file) return
-    try {
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], text: shareText })
-      } else if (navigator.share) {
-        await navigator.share({ text: shareText, url: window.location.href })
-      }
-    } catch (_) {}
-    onClose()
-  }
-
-  // WhatsApp: share image file via native share targeted to WhatsApp
+  // ── WhatsApp ────────────────────────────────────────────────────────────────
+  // Mobile: Web Share API → OS share sheet → user picks WhatsApp (image + caption)
+  // Desktop: wa.me deep-link (text caption only — WhatsApp Web can't receive files)
   const handleWhatsApp = async (e) => {
     e.stopPropagation()
-    const file = await getImageFile()
+    const file = await getFile()
     if (!file) return
-    try {
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], text: shareText })
-      } else {
-        // Desktop fallback: open WhatsApp web with text
-        window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank')
-      }
-    } catch (_) {
+
+    const result = await nativeShareWithFile(file, shareText, window.location.href)
+    if (result === 'unsupported' || result === 'file' === false) {
       window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank')
     }
-    onClose()
+    if (result !== 'abort') onClose()
   }
 
-  // Instagram: share image file via native share (routes to IG on mobile)
+  // ── Instagram ───────────────────────────────────────────────────────────────
+  // Mobile: Web Share API with image file → user picks Instagram from sheet
+  // Desktop: opens instagram.com profile (IG has no web upload share target)
   const handleInstagram = async (e) => {
     e.stopPropagation()
-    const file = await getImageFile()
+    const file = await getFile()
     if (!file) return
-    try {
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], text: shareText })
-      } else {
-        window.open('https://instagram.com/doramart_drinks', '_blank')
-      }
-    } catch (_) {}
-    onClose()
+
+    const result = await nativeShareWithFile(file, shareText, window.location.href)
+    if (result === 'unsupported') {
+      window.open('https://instagram.com/doramart_drinks', '_blank')
+    }
+    if (result !== 'abort') onClose()
   }
 
-  // Download the branded image
+  // ── More apps (generic native share) ────────────────────────────────────────
+  // Opens OS share sheet with image attached — user picks any installed app.
+  const handleMoreApps = async (e) => {
+    e.stopPropagation()
+    const file = await getFile()
+    if (!file) return
+
+    const result = await nativeShareWithFile(file, shareText, window.location.href)
+    if (result === 'unsupported') {
+      // Last resort: copy caption so the user has something useful
+      await navigator.clipboard.writeText(shareText).catch(() => {})
+      setError('Your browser can\'t open a share sheet. Caption copied!')
+      return
+    }
+    if (result !== 'abort') onClose()
+  }
+
+  // ── Download ─────────────────────────────────────────────────────────────────
   const handleDownload = async (e) => {
     e.stopPropagation()
-    const file = await getImageFile()
+    const file = await getFile()
     if (!file) return
     const url = URL.createObjectURL(file)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = file.name
-    a.click()
+    const a   = document.createElement('a')
+    a.href = url; a.download = file.name; a.click()
     URL.revokeObjectURL(url)
     onClose()
   }
 
+  // ── Copy caption ─────────────────────────────────────────────────────────────
   const handleCopyText = async (e) => {
     e.stopPropagation()
-    await navigator.clipboard.writeText(shareText)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    try {
+      await navigator.clipboard.writeText(shareText)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      setError('Clipboard access denied.')
+    }
   }
 
   const Row = ({ onClick, icon, label, sublabel }) => (
-    <button onClick={onClick} disabled={loading}
-      className="w-full flex items-center gap-3 px-4 py-3.5 text-sm text-gold-champagne/80 hover:bg-gold/10 hover:text-gold transition-colors text-left border-b border-gold/10 disabled:opacity-50">
+    <button
+      onClick={onClick}
+      disabled={loading}
+      className="w-full flex items-center gap-3 px-4 py-3.5 text-sm text-gold-champagne/80 hover:bg-gold/10 hover:text-gold transition-colors text-left border-b border-gold/10 disabled:opacity-50"
+    >
       <span className="shrink-0">{icon}</span>
       <span className="flex flex-col leading-tight">
         <span>{label}</span>
@@ -179,21 +215,31 @@ function ShareMenu({ item, onClose }) {
   )
 
   return (
-    <div className="absolute top-12 right-0 z-30 bg-night-200 border border-gold/40 shadow-2xl shadow-black/80 w-60 overflow-hidden"
-      onClick={e => e.stopPropagation()}>
+    <div
+      className="absolute top-12 right-0 z-30 bg-night-200 border border-gold/40 shadow-2xl shadow-black/80 w-64 overflow-hidden"
+      onClick={e => e.stopPropagation()}
+    >
+      {/* Header */}
       <div className="px-4 py-3 border-b border-gold/15 bg-night-300 flex items-center justify-between">
         <p className="text-xs tracking-[0.25em] uppercase text-gold font-medium">Share with Image</p>
         {loading && <Loader2 size={14} className="text-gold animate-spin" />}
       </div>
 
-      {error && <p className="text-xs text-red-400 px-4 py-2 bg-red-900/10 border-b border-red-800/20">{error}</p>}
+      {error && (
+        <p className="text-xs text-red-400 px-4 py-2 bg-red-900/10 border-b border-red-800/20">{error}</p>
+      )}
 
-      <Row onClick={handleWhatsApp}
+      {/* WhatsApp */}
+      <Row
+        onClick={handleWhatsApp}
         icon={<MessageCircle size={16} className="text-green-400" />}
         label="WhatsApp"
-        sublabel="Sends image + caption" />
+        sublabel="Sends image + caption"
+      />
 
-      <Row onClick={handleInstagram}
+      {/* Instagram */}
+      <Row
+        onClick={handleInstagram}
         icon={
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ color: '#E1306C' }}>
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" strokeWidth="2"/>
@@ -202,21 +248,35 @@ function ShareMenu({ item, onClose }) {
           </svg>
         }
         label="Instagram"
-        sublabel="Sends image to share sheet" />
+        sublabel="Sends image to share sheet"
+      />
 
-      <Row onClick={handleNativeShare}
+      {/* More apps */}
+      <Row
+        onClick={handleMoreApps}
         icon={<Share2 size={16} className="text-gold" />}
         label="More apps..."
-        sublabel="Share image to any app" />
+        sublabel="Share image to any app"
+      />
 
-      <Row onClick={handleDownload}
+      {/* Download */}
+      <Row
+        onClick={handleDownload}
         icon={<Download size={16} className="text-gold" />}
         label="Save Image"
-        sublabel="Download branded photo" />
+        sublabel="Download branded photo"
+      />
 
-      <button onClick={handleCopyText} disabled={loading}
-        className="w-full flex items-center gap-3 px-4 py-3.5 text-sm text-gold-champagne/80 hover:bg-gold/10 hover:text-gold transition-colors text-left disabled:opacity-50">
-        {copied ? <Check size={16} className="text-gold shrink-0" /> : <Copy size={16} className="text-gold shrink-0" />}
+      {/* Copy caption */}
+      <button
+        onClick={handleCopyText}
+        disabled={loading}
+        className="w-full flex items-center gap-3 px-4 py-3.5 text-sm text-gold-champagne/80 hover:bg-gold/10 hover:text-gold transition-colors text-left disabled:opacity-50"
+      >
+        {copied
+          ? <Check size={16} className="text-gold shrink-0" />
+          : <Copy  size={16} className="text-gold shrink-0" />
+        }
         <span className="flex flex-col leading-tight">
           <span>{copied ? 'Copied!' : 'Copy Caption'}</span>
           <span className="text-[10px] text-brown-light/50 mt-0.5">Text only</span>
@@ -225,6 +285,8 @@ function ShareMenu({ item, onClose }) {
     </div>
   )
 }
+
+// ─── Gallery Item ─────────────────────────────────────────────────────────────
 
 function GalleryItem({ item, onClick }) {
   const [shareOpen, setShareOpen] = useState(false)
@@ -235,29 +297,38 @@ function GalleryItem({ item, onClick }) {
       style={{ aspectRatio: '4/5' }}
       onClick={() => { if (!shareOpen) onClick(item); setShareOpen(false) }}
     >
-      <img src={item.src} alt={item.alt} loading="lazy"
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+      <img
+        src={item.src}
+        alt={item.alt}
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      />
       <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-20`} />
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/20" />
 
-      {/* Share button */}
+      {/* Share button + dropdown */}
       <div className="absolute top-3 right-3 z-20">
         <button
           onClick={(e) => { e.stopPropagation(); setShareOpen(p => !p) }}
-          className={`w-10 h-10 flex items-center justify-center border transition-all duration-300 ${shareOpen ? 'bg-gold text-night border-gold' : 'bg-black/50 border-gold/40 text-gold hover:bg-gold/20 hover:border-gold'}`}>
+          className={`w-10 h-10 flex items-center justify-center border transition-all duration-300 ${
+            shareOpen
+              ? 'bg-gold text-night border-gold'
+              : 'bg-black/50 border-gold/40 text-gold hover:bg-gold/20 hover:border-gold'
+          }`}
+        >
           <Share2 size={16} />
         </button>
         {shareOpen && <ShareMenu item={item} onClose={() => setShareOpen(false)} />}
       </div>
 
-      {/* Zoom on hover */}
+      {/* Zoom hint */}
       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-400 pointer-events-none">
         <div className="w-14 h-14 border border-gold/50 flex items-center justify-center bg-black/30">
           <ZoomIn size={22} className="text-gold" />
         </div>
       </div>
 
-      {/* Bottom label + price */}
+      {/* Label + price */}
       <div className="absolute bottom-0 left-0 right-0 px-4 py-4">
         <div className="h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent mb-3" />
         <div className="flex items-end justify-between gap-2">
@@ -266,35 +337,44 @@ function GalleryItem({ item, onClick }) {
         </div>
       </div>
 
+      {/* Click-away backdrop */}
       {shareOpen && (
-        <div className="fixed inset-0 z-10" onClick={(e) => { e.stopPropagation(); setShareOpen(false) }} />
+        <div
+          className="fixed inset-0 z-10"
+          onClick={(e) => { e.stopPropagation(); setShareOpen(false) }}
+        />
       )}
     </div>
   )
 }
 
+// ─── Lightbox ─────────────────────────────────────────────────────────────────
+
 function Lightbox({ item, onClose }) {
   const [loading, setLoading] = useState(false)
-  const [copied, setCopied] = useState(false)
+  const [copied,  setCopied]  = useState(false)
+  const [error,   setError]   = useState('')
+
   if (!item) return null
 
   const shareText = `✨ ${item.label} — ${item.price}\n\nOrder from Doramart Cocktail & Drinks 🍹\n📞 +234 800 000 0000\n📸 @doramart_drinks`
 
   const getFile = async () => {
     setLoading(true)
-    try { return await buildShareImage(item) }
-    catch { return null }
-    finally { setLoading(false) }
+    setError('')
+    try   { return await buildShareImage(item) }
+    catch (e) { console.error(e); setError('Could not build image.'); return null }
+    finally   { setLoading(false) }
   }
 
   const handleWhatsApp = async (e) => {
     e.stopPropagation()
     const file = await getFile()
     if (!file) return
-    if (navigator.canShare?.({ files: [file] })) {
-      try { await navigator.share({ files: [file], text: shareText }); return } catch (_) {}
+    const result = await nativeShareWithFile(file, shareText, window.location.href)
+    if (result === 'unsupported') {
+      window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank')
     }
-    window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank')
   }
 
   const handleDownload = async (e) => {
@@ -302,7 +382,7 @@ function Lightbox({ item, onClose }) {
     const file = await getFile()
     if (!file) return
     const url = URL.createObjectURL(file)
-    const a = document.createElement('a')
+    const a   = document.createElement('a')
     a.href = url; a.download = file.name; a.click()
     URL.revokeObjectURL(url)
   }
@@ -315,15 +395,28 @@ function Lightbox({ item, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-night/95 backdrop-blur-sm p-4" onClick={onClose}>
-      <button onClick={onClose}
-        className="absolute top-5 right-5 w-11 h-11 border border-gold/30 flex items-center justify-center text-gold hover:bg-gold/10 transition-colors z-10">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-night/95 backdrop-blur-sm p-4"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        className="absolute top-5 right-5 w-11 h-11 border border-gold/30 flex items-center justify-center text-gold hover:bg-gold/10 transition-colors z-10"
+      >
         <X size={20} />
       </button>
 
-      <div className="relative w-full max-w-md border border-gold/25 overflow-hidden" onClick={e => e.stopPropagation()}>
+      <div
+        className="relative w-full max-w-md border border-gold/25 overflow-hidden"
+        onClick={e => e.stopPropagation()}
+      >
         <div className="relative">
-          <img src={item.src} alt={item.alt} className="w-full object-cover" style={{ aspectRatio: '4/5', maxHeight: '55vh' }} />
+          <img
+            src={item.src}
+            alt={item.alt}
+            className="w-full object-cover"
+            style={{ aspectRatio: '4/5', maxHeight: '55vh' }}
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
           <div className="absolute top-4 left-4 bg-black/75 border border-gold/50 px-4 py-2">
             <span className="text-[10px] tracking-[0.3em] uppercase text-gold/70 block leading-none mb-1">Starting from</span>
@@ -342,20 +435,30 @@ function Lightbox({ item, onClose }) {
 
           <div className="h-px bg-gold/10 mb-4" />
 
+          {error && <p className="text-xs text-red-400 mb-3">{error}</p>}
+
           <p className="text-xs text-brown-light/50 mb-3 tracking-wide">Share with image:</p>
           <div className="flex items-center gap-2 flex-wrap">
-            <button onClick={handleWhatsApp} disabled={loading}
-              className="flex items-center gap-2 px-4 py-2.5 bg-green-900/30 border border-green-700/40 text-green-400 text-xs tracking-wider uppercase hover:bg-green-900/50 transition-colors font-medium disabled:opacity-50">
+            <button
+              onClick={handleWhatsApp}
+              disabled={loading}
+              className="flex items-center gap-2 px-4 py-2.5 bg-green-900/30 border border-green-700/40 text-green-400 text-xs tracking-wider uppercase hover:bg-green-900/50 transition-colors font-medium disabled:opacity-50"
+            >
               {loading ? <Loader2 size={14} className="animate-spin" /> : <MessageCircle size={14} />}
               WhatsApp
             </button>
-            <button onClick={handleDownload} disabled={loading}
-              className="flex items-center gap-2 px-4 py-2.5 bg-gold/10 border border-gold/25 text-gold text-xs tracking-wider uppercase hover:bg-gold/20 transition-colors font-medium disabled:opacity-50">
+            <button
+              onClick={handleDownload}
+              disabled={loading}
+              className="flex items-center gap-2 px-4 py-2.5 bg-gold/10 border border-gold/25 text-gold text-xs tracking-wider uppercase hover:bg-gold/20 transition-colors font-medium disabled:opacity-50"
+            >
               {loading ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
               Save
             </button>
-            <button onClick={handleCopy}
-              className="flex items-center gap-2 px-4 py-2.5 bg-night-300 border border-gold/15 text-gold-champagne/70 text-xs tracking-wider uppercase hover:bg-gold/10 transition-colors font-medium">
+            <button
+              onClick={handleCopy}
+              className="flex items-center gap-2 px-4 py-2.5 bg-night-300 border border-gold/15 text-gold-champagne/70 text-xs tracking-wider uppercase hover:bg-gold/10 transition-colors font-medium"
+            >
               {copied ? <Check size={14} /> : <Copy size={14} />}
               {copied ? 'Copied' : 'Caption'}
             </button>
@@ -365,6 +468,8 @@ function Lightbox({ item, onClose }) {
     </div>
   )
 }
+
+// ─── Gallery Section ──────────────────────────────────────────────────────────
 
 export default function Gallery() {
   const [selected, setSelected] = useState(null)
@@ -385,8 +490,12 @@ export default function Gallery() {
         <div className="mt-10 text-center">
           <p className="text-brown-light text-sm tracking-[0.2em] uppercase">
             Follow us on{' '}
-            <a href="https://instagram.com/doramart_drinks" target="_blank" rel="noreferrer"
-              className="text-gold hover:text-gold-light transition-colors">
+            <a
+              href="https://instagram.com/doramart_drinks"
+              target="_blank"
+              rel="noreferrer"
+              className="text-gold hover:text-gold-light transition-colors"
+            >
               @doramart_drinks
             </a>{' '}
             for more
