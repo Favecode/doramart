@@ -357,7 +357,7 @@ function Lightbox({ item, onClose }) {
 
   if (!item) return null
 
-  const shareText = `✨ ${item.label} — ${item.price}\n\nOrder from Doramart Cocktail & Drinks 🍹\n📞 +234 707 064 6467\n📸 @doramart_cocktail_drinks`
+  const shareText = `✨ ${item.label} — ${item.price}\n\nOrder from Doramart Cocktail & Drinks 🍹\n📞 +234 707 064 6467\n📸 @doramart_cocktail_drinks\n https://doramart.vercel.app/`
 
   const getFile = async () => {
     setLoading(true)
