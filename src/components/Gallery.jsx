@@ -17,7 +17,7 @@ const galleryItems = [
   { id: 3, label: 'Pouch Cocktail/Mocktail',    price: '₦3,000',  src: product3, alt: 'Pouch cocktail/mocktail',      color: 'from-green-900 via-teal-900 to-night-300'  },
   { id: 4, label: 'Milkshake',      price: '₦5,000', src: product4, alt: 'Milkshake',        color: 'from-yellow-900 via-amber-800 to-night-300'},
   { id: 5, label: ' Fruit Salad',     price: '₦2,000',  src: product5, alt: 'Fruit salad',       color: 'from-indigo-900 via-purple-900 to-night-300'},
-  { id: 6, label: 'Golden Fizz',          price: '₦10,500', src: product6, alt: 'Golden fizz cocktail',   color: 'from-yellow-800 via-amber-700 to-night-300'},
+  { id: 6, label: 'Frozen Blue Moon',          price: '₦5,000', src: product6, alt: 'Frozen blue moon',   color: 'from-yellow-800 via-amber-700 to-night-300'},
   { id: 7, label: 'Parfait',          price: '₦2,000', src: birthday, alt: 'Birthday parfait',   color: 'from-yellow-800 via-amber-700 to-night-300'},
 ]
 
@@ -154,7 +154,7 @@ function ShareMenu({ item, onClose }) {
 
     const result = await nativeShareWithFile(file, shareText, window.location.href)
     if (result === 'unsupported') {
-      window.open('https://instagram.com/doramart_drinks', '_blank')
+      window.open('https://instagram.com/doramart_cocktail_and_drinks', '_blank')
     }
     if (result !== 'abort') onClose()
   }
@@ -357,7 +357,7 @@ function Lightbox({ item, onClose }) {
 
   if (!item) return null
 
-  const shareText = `✨ ${item.label} — ${item.price}\n\nOrder from Doramart Cocktail & Drinks 🍹\n📞 +234 800 000 0000\n📸 @doramart_drinks`
+  const shareText = `✨ ${item.label} — ${item.price}\n\nOrder from Doramart Cocktail & Drinks 🍹\n📞 +234 707 064 6467\n📸 @doramart_cocktail_drinks`
 
   const getFile = async () => {
     setLoading(true)
@@ -491,12 +491,12 @@ export default function Gallery() {
           <p className="text-brown-light text-sm tracking-[0.2em] uppercase">
             Follow us on{' '}
             <a
-              href="https://instagram.com/doramart_drinks"
+              href="https://instagram.com/doramart_cocktail_and_drinks"
               target="_blank"
               rel="noreferrer"
               className="text-gold hover:text-gold-light transition-colors"
             >
-              @doramart_drinks
+              @doramart_cocktail_and_drinks
             </a>{' '}
             for more
           </p>
