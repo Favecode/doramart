@@ -1,20 +1,92 @@
 import React, { useState } from 'react'
 import SectionWrapper, { SectionHeader } from './SectionWrapper'
-import { Phone, Instagram, CheckCircle2, Send } from 'lucide-react'
+import { Phone, Instagram, CheckCircle2, Send, Loader2 } from 'lucide-react'
+
+// ─── EmailJS Configuration ────────────────────────────────────────────────────
+// SETUP STEPS (takes ~5 minutes, free):
+//
+// 1. Go to https://www.emailjs.com and create a free account
+// 2. Dashboard → Email Services → Add New Service → Gmail → Connect your Gmail
+//    Copy the Service ID (looks like "service_xxxxxxx") → paste into EMAILJS_SERVICE_ID
+//
+// 3. Dashboard → Email Templates → Create New Template
+//    Paste this template content:
+//    ─────────────────────────────────────────────
+//    Subject: New Booking Request from {{from_name}}
+//
+//    New booking request received on Doramart website:
+//
+//    Name:       {{from_name}}
+//    Email:      {{from_email}}
+//    Phone:      {{phone}}
+//    Event Type: {{event_type}}
+//    Event Date: {{event_date}}
+//
+//    Message:
+//    {{message}}
+//    ─────────────────────────────────────────────
+//    Copy the Template ID (looks like "template_xxxxxxx") → paste into EMAILJS_TEMPLATE_ID
+//
+// 4. Dashboard → Account → General → Public Key
+//    Copy it → paste into EMAILJS_PUBLIC_KEY
+//
+// 5. In the template "To Email" field, put your Gmail address so you receive the emails.
+
+const EMAILJS_SERVICE_ID  = 'service_6ilxdly'    // e.g. 'service_ab12cd3'
+const EMAILJS_TEMPLATE_ID = 'template_mgz6fnx'   // e.g. 'template_xy78z90'
+const EMAILJS_PUBLIC_KEY  = 'JBx1Gk70V4p5rbbju'     // e.g. 'aBcDeFgHiJkLmNoPq'
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 const eventTypes = [
   'Wedding', 'Birthday', 'Corporate Event', 'Private Party', 'Brand Activation', 'Other'
 ]
 
 export default function Booking() {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', eventType: '', date: '', message: '' })
+  const [form, setForm] = useState({
+    name: '', email: '', phone: '', eventType: '', date: '', message: ''
+  })
   const [submitted, setSubmitted] = useState(false)
+  const [sending,   setSending]   = useState(false)
+  const [sendError, setSendError] = useState('')
 
   const update = (field, val) => setForm(p => ({ ...p, [field]: val }))
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSubmitted(true)
+    setSending(true)
+    setSendError('')
+
+    // Dynamically load EmailJS SDK (no npm install needed)
+    if (!window.emailjs) {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js'
+        script.onload  = resolve
+        script.onerror = () => reject(new Error('Failed to load EmailJS'))
+        document.head.appendChild(script)
+      })
+    }
+
+    window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY })
+
+    try {
+      await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        from_name:  form.name,
+        from_email: form.email,
+        phone:      form.phone      || 'Not provided',
+        event_type: form.eventType,
+        event_date: form.date       || 'Not specified',
+        message:    form.message    || 'No message provided',
+        reply_to:   form.email,
+      })
+      setSubmitted(true)
+    } catch (err) {
+      console.error('EmailJS error:', err)
+      setSendError('Failed to send. Please try again or contact us directly.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -29,7 +101,7 @@ export default function Booking() {
 
         <div className="grid lg:grid-cols-5 gap-12 items-start">
 
-          {/* Contact Info */}
+          {/* ── Contact Info ── */}
           <div className="lg:col-span-2 space-y-8">
             <div>
               <h3 className="font-serif text-2xl text-gold-champagne mb-6">Let's Talk</h3>
@@ -39,7 +111,8 @@ export default function Booking() {
             </div>
 
             <div className="space-y-5">
-              <a href="tel:+2347070646467" className="group flex items-center gap-4 p-4 border border-gold/10 hover:border-gold/30 transition-all duration-300 bg-night-200">
+              <a href="tel:+2347070646467"
+                className="group flex items-center gap-4 p-4 border border-gold/10 hover:border-gold/30 transition-all duration-300 bg-night-200">
                 <div className="w-10 h-10 bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
                   <Phone size={16} className="text-gold" />
                 </div>
@@ -61,7 +134,6 @@ export default function Booking() {
               </a>
             </div>
 
-            {/* Quote */}
             <div className="border-l-2 border-gold/40 pl-5 py-2 mt-8">
               <p className="font-serif italic text-gold-champagne/70 text-sm leading-relaxed">
                 "Every great event deserves a drink worth remembering."
@@ -70,7 +142,7 @@ export default function Booking() {
             </div>
           </div>
 
-          {/* Form */}
+          {/* ── Form ── */}
           <div className="lg:col-span-3">
             {submitted ? (
               <div className="border border-gold/20 bg-night-200 p-12 text-center">
@@ -80,7 +152,7 @@ export default function Booking() {
                   Thank you! We'll review your request and get back to you within 24 hours to discuss your event.
                 </p>
                 <button
-                  onClick={() => setSubmitted(false)}
+                  onClick={() => { setSubmitted(false); setForm({ name: '', email: '', phone: '', eventType: '', date: '', message: '' }) }}
                   className="mt-8 text-xs tracking-[0.25em] uppercase text-gold border-b border-gold/40 hover:border-gold transition-colors pb-0.5"
                 >
                   Submit Another Request
@@ -88,6 +160,7 @@ export default function Booking() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="border border-gold/15 bg-night-200 p-8 space-y-5">
+
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-[10px] tracking-[0.3em] uppercase text-brown-light mb-2">Full Name *</label>
@@ -159,13 +232,31 @@ export default function Booking() {
                   />
                 </div>
 
+                {/* Error message */}
+                {sendError && (
+                  <p className="text-red-400 text-xs border border-red-800/30 bg-red-900/10 px-4 py-3">
+                    {sendError}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full bg-gold text-night py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-gold-light transition-all duration-300 hover:shadow-[0_0_30px_rgba(201,168,76,0.4)] active:scale-[0.99] flex items-center justify-center gap-3"
+                  disabled={sending}
+                  className="w-full bg-gold text-night py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-gold-light transition-all duration-300 hover:shadow-[0_0_30px_rgba(201,168,76,0.4)] active:scale-[0.99] flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:shadow-none"
                 >
-                  <Send size={14} />
-                  Send Booking Request
+                  {sending ? (
+                    <>
+                      <Loader2 size={14} className="animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={14} />
+                      Send Booking Request
+                    </>
+                  )}
                 </button>
+
               </form>
             )}
           </div>
