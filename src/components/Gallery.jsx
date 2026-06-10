@@ -119,7 +119,7 @@ function ShareMenu({ item, onClose }) {
   const [copied,  setCopied]  = useState(false)
   const [error,   setError]   = useState('')
 
-  const shareText = `✨ ${item.label} — ${item.price}\n\nOrder from Doramart Cocktail & Drinks 🍹\n📞 +234 800 000 0000\n📸 @doramart_drinks`
+  const shareText = `✨ ${item.label} — ${item.price}\n\nOrder from Doramart Cocktail & Drinks 🍹\n📞 +234 707 064 6467\n📸 @doramart_drinks\n🌐 https://doramart.vercel.app/`
 
   const getFile = async () => {
     setLoading(true)
